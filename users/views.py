@@ -1,17 +1,17 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from .serializers import UserSerializer
+from .serializers import RegisterUserSerializer
 
 User = get_user_model()
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = RegisterUserSerializer
 
 class RegisterUserView(generics.CreateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = RegisterUserSerializer
     permission_classes = [permissions.IsAdminUser]  # только админ
 
     def create(self, request, *args, **kwargs):
@@ -22,5 +22,5 @@ class RegisterUserView(generics.CreateAPIView):
 
         return Response({
             "message": f"Пользователь {user.username} успешно создан",
-            "user": UserSerializer(user).data
+            "user": RegisterUserSerializer(user).data
         }, status=status.HTTP_201_CREATED)
